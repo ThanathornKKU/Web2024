@@ -1,11 +1,86 @@
-<html>
-  <body>
-    <h1>วิชา SC310006 Mobile and Web Application Development</h1>
-    <ul>
-      <li>งานที่ 1</li>
-      <li>งานที่ 2</li>
-      <li>งานที่ 3</li>
-    </ul>
-    <h3>โดย นายธนธรณ์ จูหลาย 653380131-7 sec.1</h3>
-  </body>
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SC310006 Mobile and Web Application Development</title>
+  <style>
+    /* Global Styles */
+    body {
+      font-family: 'Helvetica', sans-serif;
+      background-color: #ffffff; /* Snowy white */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: #2d2d2d;
+      text-align: center;
+      padding-top: 2.5rem;
+      padding-bottom: 5rem;
+    }
+    h1{
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+    h2{
+      font-size: 2rem;
+      margin-bottom: 2rem;
+    }
+    li {
+      list-style-type:none;
+      margin-bottom: 2rem;
+      font-size: 2rem;
+      font-weight: 500;
+    }
+    a {
+      color: #2d2d2d;
+      text-decoration: none;
+      border: 1px solid #2d2d2d;
+      padding: 0.5rem 2rem;
+      border-radius: 15px;
+    }
+    a:hover {
+      background-color: #2d2d2d;
+      color: #ffffff;
+    }
+    /* Snowfall Animation */
+    .snowflake {
+      position: absolute;
+      top: -10px;
+      font-size: 1.5em;
+      color: white;
+      animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(-100px); opacity: 0; }
+      50% { opacity: 1; }
+      100% { transform: translateY(80vh); opacity: 0; }
+    }
+
+    /* Random Snowflake Position */
+    @keyframes fadeInList {
+      0% { opacity: 0; transform: translateY(50px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>วิชา SC310006 Mobile and Web Application Development</h1>
+  <h2>โดย นายธนธรณ์ จูหลาย 653380131-7 sec.1</h2>
+  <ul>
+    <li><a href="./work/work1/work1.html">งานที่ 1</a></li>
+  </ul>
+
+  <!-- Snowflakes for the Christmas Theme -->
+  <div class="snowflake" style="left: 10%; animation-duration: 5s;">❄️</div>
+  <div class="snowflake" style="left: 20%; animation-duration: 8s;">❄️</div>
+  <div class="snowflake" style="left: 40%; animation-duration: 6s;">❄️</div>
+  <div class="snowflake" style="left: 50%; animation-duration: 10s;">❄️</div>
+  <div class="snowflake" style="left: 60%; animation-duration: 7s;">❄️</div>
+  <div class="snowflake" style="left: 80%; animation-duration: 9s;">❄️</div>
+  <div class="snowflake" style="left: 90%; animation-duration: 4s;">❄️</div>
+
+</body>
 </html>

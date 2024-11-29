@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Work 1 : แบบทดสอบ ม.1</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<body>
+    <!-- คะแนนที่มุมขวาบน -->
+    <div id="scoreDisplay" class="position-fixed mt-2 me-2 top-0 end-0 bg-light text-dark p-3 rounded shadow-sm d-none">
+        คะแนน: 0
+    </div>
+
+    <!-- ส่วนหัว -->
+    <div class="container-fluid p-5 bg-primary text-white text-center">
+        <h1>แบบทดสอบ ม.1</h1>
+    </div>
+
+    <!-- ปุ่มเริ่มทำแบบทดสอบ -->
+    <div class="container mt-5">
+        <div class="row" id="startBox">
+            <button class="btn btn-primary" id="btnStart">เริ่มทำแบบทดสอบ</button>
+        </div>
+
+        <!-- ส่วนแสดงคำถาม -->
+        <div class="row mb-4" id="quizBox" style="display:none;">
+            <div id="quizContent"></div>
+        </div>
+
+        <!-- ส่วนแสดงเฉลย -->
+        <div class="row mb-4" id="answerBox" style="display:none;">
+            <h3 class="text-center mb-4">เฉลยคำตอบ</h3>
+            <div id="answerContent"></div>
+            <div class="text-center mt-4">
+                <button class="btn btn-secondary" id="btnRetry">กลับไปที่หน้าแบบทดสอบ</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            const letters = ['ก.', 'ข.', 'ค.', 'ง.'];
+            let quizData = [];
+            let currentPage = 0;
+            const questionsPerPage = 10;
+            let userAnswers = {}; // เก็บคำตอบของผู้ใช้
+
+            $.getJSON("quiz.json", function (data) {
+                quizData = data;
+            });
+
+            $("#btnStart").click(function () {
+                if (quizData.length === 0) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "เกิดข้อผิดพลาด",
+                        text: "ไม่สามารถโหลดคำถามได้ กรุณาลองใหม่อีกครั้ง!"
+                    });
+                    return;
+                }
+
+                $("#startBox").hide();
+                $("#quizBox").show();
+                renderQuizPage();
+            });
+
+            function renderQuizPage() {
+                let quizHTML = "";
+                const start = currentPage * questionsPerPage;
+                const end = Math.min(start + questionsPerPage, quizData.length);
+
+                for (let i = start; i < end; i++) {
+                    const quiz = quizData[i];
+                    const userAnswer = userAnswers[i] || ''; // ดึงคำตอบที่บันทึกไว้
+
+                    quizHTML += `
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <h5 class="card-title">${i + 1}. ${quiz.title}</h5>
+                                ${quiz.option.map((opt, optIndex) => `
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="quiz-${i}" id="quiz-${i}-opt-${optIndex}" value="${optIndex + 1}" 
+                                            ${userAnswer == optIndex + 1 ? 'checked' : ''}>
+                                        <label class="form-check-label" for="quiz-${i}-opt-${optIndex}">
+                                            ${letters[optIndex]} ${opt}
+                                        </label>
+                                    </div>
+                                `).join("")}
+                            </div>
+                        </div>
+                    `;
+                }
+                $("#quizContent").html(quizHTML);
+
+                // ปุ่มต่าง ๆ สำหรับหน้าทดสอบ
+                let navButtons = '';
+                if (currentPage === 0) {
+                    navButtons = `
+                        <div class="d-flex justify-content-end">
+                            <button class="btn btn-primary ${end >= quizData.length ? 'd-none' : ''}" id="btnNext" style="text-align: right;">ถัดไป</button>
+                        </div>
+                    `;
+                } else {
+                    navButtons = `
+                        <div class="d-flex justify-content-between">
+                            <button class="btn btn-secondary ${currentPage === 0 ? 'd-none' : ''}" id="btnPrev">ย้อนกลับ</button>
+                            <button class="btn btn-primary ${end >= quizData.length ? 'd-none' : ''}" id="btnNext">ถัดไป</button>
+                            <button class="btn btn-success ${end >= quizData.length ? '' : 'd-none'}" id="btnCheckAnswer">ตรวจคำตอบ</button>
+                        </div>
+                    `;
+                }
+
+                $("#quizContent").append(navButtons);
+
+                $("#btnPrev").click(function () {
+                    saveAnswers();
+                    currentPage--;
+                    renderQuizPage();
+                });
+
+                $("#btnNext").click(function () {
+                    saveAnswers();
+                    currentPage++;
+                    renderQuizPage();
+                });
+            }
+
+            function saveAnswers() {
+                const start = currentPage * questionsPerPage;
+                const end = Math.min(start + questionsPerPage, quizData.length);
+
+                for (let i = start; i < end; i++) {
+                    const selected = $(`input[name="quiz-${i}"]:checked`).val();
+                    if (selected) {
+                        userAnswers[i] = selected;
+                    }
+                }
+            }
+
+            $("#quizBox").on("click", "#btnCheckAnswer", function () {
+                saveAnswers();
+                let score = 0;
+                let allAnswered = true;
+
+                quizData.forEach((quiz, index) => {
+                    const selected = userAnswers[index];
+                    if (!selected) allAnswered = false;
+                    if (selected == quiz.answer) score++;
+                });
+
+                if (!allAnswered) {
+                    Swal.fire({
+                        icon: "warning",
+                        title: "กรุณาทำข้อสอบให้ครบทุกข้อ",
+                        text: "คุณยังตอบคำถามไม่ครบทุกข้อ กรุณาตรวจสอบอีกครั้ง!"
+                    });
+                    return;
+                }
+
+                Swal.fire({
+                    icon: "success",
+                    title: "ผลคะแนนของคุณ",
+                    text: `คุณได้คะแนน ${score} จาก ${quizData.length} ข้อ`
+                });
+
+                $("#quizBox").hide();
+                $("#answerBox").show();
+                $("#answerContent").html(`<p>คะแนนรวม: ${score} จาก ${quizData.length}</p>`);
+            });
+
+            $("#btnRetry").click(function () {
+                currentPage = 0;
+                userAnswers = {};
+                $("#answerBox").hide();
+                $("#startBox").show();
+                $("#quizContent").empty();
+                $("#scoreDisplay").addClass("d-none");
+            });
+        });
+    </script>
+</body>
+
+</html>
