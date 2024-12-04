@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>แบบทดสอบออนไลน์</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@3/dist/vuetify.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@3/dist/vuetify.min.js"></script>
+    
+    <!-- Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #f5f5f5;
+            font-family: "Kanit", sans-serif;
+        }
+        h1 {
+            text-align: center;
+            color: #673ab7;
+            margin-bottom: 20px;
+        }
+        h3 {
+            color: #333;
+            font-size: 1.5em;
+        }
+        p {
+            font-size: 1.2em;
+            color: #555;
+        }
+        .v-btn-wrap {
+            margin-top: 5em;
+            text-align: center;
+            color: white;
+            font-size: 1em;
+        }
+        .v-btn--blue {
+            background-color: #2196f3 !important;
+        }
+        .v-btn--green {
+            background-color: #4caf50 !important;
+        }
+        .v-btn--purple {
+            background-color: #9c27b0 !important;
+        }
+        .v-btn--red {
+            background-color: #f44336 !important;
+        }
+        h2 {
+            color: #4caf50;
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        v-container {
+            padding-top: 30px;
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        .v-radio-group {
+            margin-top: 20px;
+        }
+        .v-radio {
+            margin-bottom: 10px;
+            border: 1px solid rgb(212, 212, 212);
+            border-radius: 10px;
+        }
+        .v-radio:hover{
+            background-color: rgb(211, 211, 211);
+        }
+        
+        .Questions{
+            padding: 20px;
+            border: 1px solid rgb(179, 179, 179);
+            border-radius: 20px;
+        }
+        .Questions .Q-box{
+            min-height: 400px;
+        }
+        .v-label--clickable{
+            width: 100%;
+        }
+        ul li{
+            margin-left: 50px;
+        }
+        .advice{
+            border: 5px dashed;
+            border-radius: 5px;
+            padding: 40px;
+            line-height: 2.25em;
+        }
+        .wrap-btn{
+            display: flex;
+            gap: 20px;
+        }
+        .RS-btn{
+            text-align: center;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <v-app>
+            <v-container>
+                <h1>แบบทดสอบออนไลน์</h1>
+
+                <!-- Start Quiz Button -->
+                <div v-if="!quizStarted">
+                    <div class="advice">
+                        <h3>แบบทดสอบคณิตศาสตร์สำหรับนักเรียน</h3>
+                        <p>คำแนะนำสำหรับผู้ทำแบบทดสอบ:</p>
+                        <ul>
+                            <li>แบบทดสอบนี้ประกอบด้วยคำถามทั้งหมด 20 ข้อ โดยมีคำถามในหัวข้อคณิตศาสตร์พื้นฐาน เช่น การคูณ, การบวก, การหาร, และการคำนวณพื้นที่ผิวของรูปทรงต่างๆ</li>
+                            <li>สำหรับแต่ละคำถาม คุณจะมีตัวเลือก 4 ตัวเลือกให้เลือกคำตอบที่ถูกต้องที่สุด</li>
+                            <li>โปรดอ่านคำถามให้ละเอียดก่อนทำการเลือกคำตอบ</li>
+                            <li>เลือกคำตอบที่คุณคิดว่าถูกต้องที่สุดจากตัวเลือกที่มีให้</li>
+                            <li>คำถามบางข้ออาจต้องใช้การคำนวณง่ายๆ เช่น การคูณหรือการหารในการหาคำตอบ</li>
+                            <li>หลังจากเลือกคำตอบแล้ว จะมีการตรวจสอบคำตอบของคุณและแสดงผลการทำแบบทดสอบให้ทราบ</li>
+                        </ul>
+                        <div class="v-btn-wrap">
+                            <v-btn @click="startQuiz" color="blue">เริ่มทำแบบทดสอบ</v-btn>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quiz Questions -->
+                <div class="Questions" v-if="quizStarted && !showScore && page < qlist.length">
+                    <div class="Q-box">
+                        <h3>ข้อที่ {{ page + 1 }}</h3>
+                        <p v-html="qlist[page].title"></p>
+    
+                        <v-radio-group v-model="answers[page]" :key="page">
+                            <v-radio v-for="(option, index) in qlist[page].option" 
+                                     :key="index" 
+                                     :label="option" 
+                                     :value="index + 1">
+                            </v-radio>
+                        </v-radio-group>
+                    </div>
+                    <div class="wrap-btn">
+                        <div>
+                            <v-btn @click="previousQuestion" :disabled="page === 0" color="blue">ย้อนกลับ</v-btn>
+                        </div>
+                        <div>
+                            <v-btn v-if="page < qlist.length - 1" @click="nextQuestion" color="green">ถัดไป</v-btn>
+                            <v-btn v-if="page === qlist.length - 1" @click="gradeQuiz" color="purple">ตรวจสอบคะแนน</v-btn>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quiz Result -->
+                <div v-if="showScore">
+                    <h2>คุณได้คะแนน {{ score }} จาก {{ qlist.length }} คะแนน</h2>
+                    <div class="RS-btn">
+                        <v-btn @click="restartQuiz" color="red">เริ่มทำแบบทดสอบใหม่</v-btn>
+                    </div>
+                </div>
+            </v-container>
+        </v-app>
+    </div>
+
+    <script>
+        const { createApp } = Vue;
+        const { createVuetify } = Vuetify;
+        const vuetify = createVuetify();
+
+        const app = createApp({
+            data() {
+                return {
+                    qlist: [],
+                    answers: [],
+                    page: 0,
+                    score: 0,
+                    showScore: false,
+                    quizStarted: false
+                };
+            },
+            mounted() {
+                this.loadQuiz();
+            },
+            methods: {
+                async loadQuiz() {
+                    const res = await fetch("quiz.json");
+                    this.qlist = await res.json();
+                    this.answers = Array(this.qlist.length).fill(null);
+                },
+                startQuiz() {
+                    this.quizStarted = true;
+                },
+                nextQuestion() {
+                    if (this.page < this.qlist.length - 1) this.page++;
+                },
+                previousQuestion() {
+                    if (this.page > 0) this.page--;
+                },
+                gradeQuiz() {
+                    this.score = this.answers.reduce((total, answer, index) => {
+                        return total + (answer === this.qlist[index].answer ? 1 : 0);
+                    }, 0);
+                    this.showScore = true;
+                },
+                restartQuiz() {
+                    this.page = 0;
+                    this.score = 0;
+                    this.showScore = false;
+                    this.quizStarted = false;
+                    this.answers = Array(this.qlist.length).fill(null);
+                }
+            }
+        });
+
+        app.use(vuetify).mount('#app');
+    </script>
+</body>
+</html>
