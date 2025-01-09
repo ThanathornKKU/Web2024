@@ -1,0 +1,40 @@
+<html>
+
+<head>
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.5.2/dist/aframe-extras.min.js"></script>
+  <title>Work 4 : เว็บแนะนำตัวเองแบบ VR-360</title>
+</head>
+
+<body>
+  <a-scene>
+    <!-- <a-box position="-1 0.5 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
+    <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E"></a-sphere>
+    <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
+    <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane> -->
+    <a-sky color="#ECECEC" src="bg7.jpg"></a-sky>
+    <a-entity rotation="0 0 0" animation="property: rotation; to: 0 360 0; loop: true; dur: 10000">
+      <!-- <a-sphere position="5 2 0" color="mediumseagreen"></a-sphere> -->
+      <a-entity gltf-model="Dingus the cat.glb" position="0 0.25 -2" scale="0.25 0.25 0.25" rotation="0 45 0"
+        animation-mixer animation="property: rotation; to: 0 360 0; loop: true; dur: 400"></a-entity>
+
+
+    </a-entity>
+    <!-- กล้องที่ล็อก -->
+    <a-entity camera position="0 1.6 0" look-controls="enabled: true" wasd-controls="enabled: false"></a-entity>
+
+    <!-- แผ่นสี่เหลี่ยม -->
+    <a-plane position="0 1.75 -2" width="2.5" height="1.25" color="#2196F3" material="shader: flat; opacity: 0.8"
+      look-at="[camera]">
+      <!-- ข้อความบนแผ่น -->
+      <a-text value="Thanathorn Chulay" color="white" align="center" position="0 0 0.01"></a-text>
+    </a-plane>
+    <!-- Adding the Business Man Model -->
+
+
+
+    <!-- <a-entity gltf-model="Business Man.glb" position="0 0.75 -2" scale="0.75 0.75 0.75" rotation="0 45 0"></a-entity> -->
+  </a-scene>
+</body>
+
+</html>
