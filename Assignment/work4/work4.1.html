@@ -1,0 +1,78 @@
+<html>
+<head>
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script>
+        AFRAME.registerComponent('play-on-click', {
+            init: function () {
+                this.onClick = this.onClick.bind(this);
+            },
+            play: function () {
+                this.el.addEventListener('click', this.onClick);
+            },
+            pause: function () {
+                this.el.removeEventListener('click', this.onClick);
+            },
+            onClick: function () {
+                var videoEl = this.el.getAttribute('material').src;
+                if (!videoEl) { return; }
+                videoEl.play();
+            }
+        });
+    </script>
+</head>
+<body>
+    <a-scene>
+        <!-- พื้นหลัง -->
+        <a-sky color="#000000"></a-sky>
+        <a-plane position="0 0 0" rotation="-90 0 0" width="30" height="30" color="#333333"></a-plane>
+
+        <!-- วิดีโอแบบปกติ -->
+        <a-video
+            src="boxer.mp4"
+            width="4"
+            height="2.5"
+            position="0 2 -3"
+            play-on-click>
+        </a-video>
+
+        <!-- ข้อความอธิบาย -->
+        <a-text
+            value="Click on video to play"
+            position="0 3 -3"
+            align="center"
+            color="#ffffff">
+        </a-text>
+
+        <!-- ปุ่มควบคุม (เป็นตัวอย่าง) -->
+        <a-entity position="0 1 -3">
+            <a-box
+                position="-0.5 0 0"
+                width="0.3"
+                height="0.3"
+                depth="0.1"
+                color="#ff0000"
+                class="clickable"
+                play-on-click>
+                <a-text value="Play" align="center" position="0 0 0.1" scale="0.5 0.5 0.5"></a-text>
+            </a-box>
+            
+            <a-box
+                position="0.5 0 0"
+                width="0.3"
+                height="0.3"
+                depth="0.1"
+                color="#0000ff"
+                class="clickable">
+                <a-text value="Pause" align="center" position="0 0 0.1" scale="0.5 0.5 0.5"></a-text>
+            </a-box>
+        </a-entity>
+
+        <!-- กล้อง -->
+        <a-entity position="0 1.6 0">
+            <a-camera>
+                <a-cursor color="#FFFFFF"></a-cursor>
+            </a-camera>
+        </a-entity>
+    </a-scene>
+</body>
+</html>

@@ -3,37 +3,93 @@
 <head>
   <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.5.2/dist/aframe-extras.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aframe-troika-text/dist/aframe-troika-text.min.js"></script>
   <title>Work 4 : เว็บแนะนำตัวเองแบบ VR-360</title>
 </head>
 
 <body>
-  <a-scene>
-    <!-- <a-box position="-1 0.5 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
-    <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E"></a-sphere>
-    <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
-    <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane> -->
-    <a-sky color="#ECECEC" src="bg7.jpg"></a-sky>
-    <a-entity rotation="0 0 0" animation="property: rotation; to: 0 360 0; loop: true; dur: 10000">
-      <!-- <a-sphere position="5 2 0" color="mediumseagreen"></a-sphere> -->
-      <a-entity gltf-model="Dingus the cat.glb" position="0 0.25 -2" scale="0.25 0.25 0.25" rotation="0 45 0"
-        animation-mixer animation="property: rotation; to: 0 360 0; loop: true; dur: 400"></a-entity>
+  <a-scene cursor="rayOrigin: mouse">
+    <!-- <a-sky color="#ECECEC" src="bg9.jpg"></a-sky> -->
+    <a-sky color="#ECECEC" src="sky_yn2.webp" rotation="0 180 0"></a-sky>
 
-
+    <!-- Camera with Enhanced Controls -->
+    <a-entity position="2.5 0.75 1" rotation="0 -90 0">
+      <a-camera look-controls="pointerLockEnabled: true" wasd-controls>
+        <a-cursor color="#FFFFFF"
+          animation__click="property: scale; from: 0.1 0.1 0.1; to: 1 1 1; dur: 150; startEvents: click"></a-cursor>
+      </a-camera>
     </a-entity>
-    <!-- กล้องที่ล็อก -->
-    <a-entity camera position="0 1.6 0" look-controls="enabled: true" wasd-controls="enabled: false"></a-entity>
-
-    <!-- แผ่นสี่เหลี่ยม -->
-    <a-plane position="0 1.75 -2" width="2.5" height="1.25" color="#2196F3" material="shader: flat; opacity: 0.8"
-      look-at="[camera]">
+    <!-- แผ่นสี่เหลี่ยม กระดานข้อความ-->
+    <a-plane position="6.25 1.75 0.1" rotation="0 -90 0" width="2.75" height="1.25" color="#2196F3"
+      material="shader: flat; opacity: 0.8" look-at="[camera]">
       <!-- ข้อความบนแผ่น -->
-      <a-text value="Thanathorn Chulay" color="white" align="center" position="0 0 0.01"></a-text>
+      <a-text value="Hello everyone !!" width="4" color="white" align="center" position="0 0.4 0"></a-text>
+      <a-text value="My name is Thanathorn Chulay" width="4" color="white" align="center" position="0 0.1 0"></a-text>
+      <a-text value="My student id is 653380131-7" width="4" color="white" align="center" position="0 -0.25 0"></a-text>
     </a-plane>
-    <!-- Adding the Business Man Model -->
+    <!-- วิดีโอแบบปกติ -->
+    <a-video src="boxer.mp4" position="4.3 1.6 -3.47" rotation="0 0 0" width="2" height="1" muted autoplay loop></a-video>
+    <!-- ข้อความหลัก (เลเยอร์ด้านหน้า) -->
+    <a-text value="I like to practice boxing." width="5" position="4.3 2.5 -3.47" color="white" align="center"></a-text>
+    <!-- เส้นขอบ (เลเยอร์ด้านหลัง) -->
+    <a-text value="I like to practice boxing." width="5" position="4.3 2.5 -3.50" color="black" align="center"></a-text>
+
+    <!-- Adding the Cat Model -->
+    <a-entity position="-2 0.25 1" rotation="0 0 0" animation="property: rotation; to: 0 360 0; loop: true; dur: 10000">
+      <a-entity gltf-model="Dingus_the_cat.glb" position="1 0 1" scale="0.25 0.25 0.25" rotation="0 90 0"
+        animation-mixer animation="property: rotation; to: 0 360 0; loop: true; dur: 10000"
+        sound="on: click; src: #meow-sound; volume: 1"></a-entity>
+    </a-entity>
+    <!-- Adding the sound asset -->
+    <a-assets>
+      <audio id="meow-sound" src="angry-cat.mp3"></audio>
+    </a-assets>
+
+    <!-- Adding the frtghz Model -->
+    <a-entity position="20 0.25 -10" rotation="60 45 0" animation="property: rotation; to: -90 0 180; loop: true; dur: 5000">
+      <a-entity gltf-model="frtghz.glb" position="20 0 20" scale="1 1 1" rotation="0 90 0"
+        animation-mixer animation="property: rotation; to: 0 0 0; loop: true; dur: 10000"></a-entity>
+    </a-entity>
+
+    <!-- <a-text value="I have a cat named Emma." width="7.5" position="-2 2.75 1" rotation="0 90 0" color="white"
+      align="center" look-at="[camera]"></a-text>
+    <a-text value="I call her Ma Pao." width="7.5" position="-2 2.4 1" rotation="0 90 0" color="white" align="center"
+      material="side: double"></a-text> -->
+
+    <a-troika-text value="This cat's name is Emma." font-size="0.2" color="white" position="-2 2.75 1" rotation="0 90 0"
+      look-at="[camera]" align="center" max-width="5"></a-troika-text>
+    <a-troika-text value="I call her Ma Pao." font-size="0.2" color="white" position="-2 2.4 1" rotation="0 90 0"
+      look-at="[camera]" align="center" max-width="5"></a-troika-text>
+
+    <!-- Adding the CatTree Model -->
+    <a-entity gltf-model="CatTree.glb" position="-2 0.45 1" scale="0.25 0.25 0.25" rotation="0 -115 0"></a-entity>
 
 
 
-    <!-- <a-entity gltf-model="Business Man.glb" position="0 0.75 -2" scale="0.75 0.75 0.75" rotation="0 45 0"></a-entity> -->
+
+    <!-- พื้นสี่เหลี่ยม -->
+    <a-plane position="-3.4 4.1 1" rotation="90 0 0" width="21" height="16" color="white"></a-plane>
+    <!-- กรอบรูป -->
+    <a-plane position="-4.5 2.75 -2.5" rotation="0 90 0" width="1.6" height="1.1" src="profile3.jpg"></a-plane>
+    <a-text value="This is my photo." width="2.5" position="-4.5 2.1 -2.5" rotation="0 90 0" color="black"
+      align="center"></a-text>
+
+    <!-- Adding the Man Model -->
+    <a-entity gltf-model="BeachCharacter.glb" position="6 0.4 2" scale="1.2 1.2 1" rotation="0 -115 0" sound="on: click; src: #man-sound; volume: 1"></a-entity>
+    <a-assets>
+      <audio id="man-sound" src="hello-there.mp3"></audio>
+    </a-assets>
+    <!-- Adding the Sushi Model -->
+    <a-entity gltf-model="SUSHI.glb" position="0.5 1.75 -2" scale="1 1 1" rotation="0 180 0"></a-entity>
+    <a-troika-text value="The sushi is very delicious." font-size="0.15" color="white" position="0.5 2 -2"
+      rotation="0 0 0" look-at="[camera]" align="center" max-width="5"></a-troika-text>
+    <a-troika-text value="The sushi is very delicious." font-size="0.15" color="black" position="0.515 2 -2.01"
+      rotation="0 0 0" look-at="[camera]" align="center" max-width="5"></a-troika-text>
+
+    <!-- Adding the house Model -->
+    <a-entity gltf-model="Apartment_2.glb" position="0 1.5 0" scale="10 10 10" rotation="0 0 0"></a-entity>
+    <!-- Adding the dumbbells Model -->
+    <a-entity gltf-model="Dumbbells.glb" position="1 0.5 3.1" scale="1 1 1" rotation="0 120 0"></a-entity>
   </a-scene>
 </body>
 
